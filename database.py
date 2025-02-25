@@ -111,10 +111,27 @@ def importCSV2DB():
 
         #break
 
+def getLanguages():
+
+    connection = connect2Database()
+    cursor = connection.cursor()
+    cursor.execute(f"SELECT DISTINCT language from {config.analysisTableName}")
+    rows = cursor.fetchall()
+    connection.close()
+    
+    languageSet = set()
+    for rowTuple in rows:
+        item = rowTuple[0]
+        if item is not None:
+            for subItem in item.split(','):
+                languageSet.add(subItem.strip())
+
+    return languageSet
+
 if __name__ == '__main__':
     
     #dropDatabase()
     #createDatabase()
     #importCSV2DB()
-
-
+    languageSet = getLanguages()
+    print(languageSet)
